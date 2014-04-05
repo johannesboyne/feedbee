@@ -24,14 +24,12 @@ exports.newStream = function (url) {
     var stream = this,
     meta = this.meta,
     item
+
     while ((item = stream.read())) {
-      console.log(item)
-      debugger
-      //throw item
       ts.write({meta: meta, item: item})
     }
-    ts.end()
   })
+  feedparser.on('end', ts.end)
 
   return ts;
 }
