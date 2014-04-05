@@ -32,5 +32,5 @@ http.createServer(function (req, res) {
       date: date.getUTCFullYear() + '/' + (date.getMonth()+1) + '/' +  date.getUTCDate()
     }))
   })
-}).listen(process.env.OPENSHIFT_NODEJS_PORT || 1337);
+}).listen(process.env.OPENSHIFT_NODEJS_PORT || 1337, process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1")
 
