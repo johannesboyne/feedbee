@@ -19,14 +19,23 @@ function write (data) {
   })
 }
 
-function collectData () {
-  feedstream.newStream('http://www.forbes.com/feeds/popstories.xml').pipe(through(write)).pipe(consumer.createWriteStream())
+function streamStepper (array, position) {
+  feedstream.newStream(array[position]).pipe(through(write)).pipe(consumer.createWriteStream())
   .on('close', function () {
-    feedstream.newStream('http://feeds.reuters.com/reuters/topNews?format=xml').pipe(through(write)).pipe(consumer.createWriteStream())
-    .on('close', function () {
-      feedstream.newStream('http://feeds.bbci.co.uk/news/rss.xml').pipe(through(write)).pipe(consumer.createWriteStream())
-    })
+    position++
+    if (array.length > position) {
+      streamStepper(array, position)
+    }
   })
+}
+
+function collectData () {
+  var urls = [
+    'http://www.forbes.com/feeds/popstories.xml',
+    'http://feeds.reuters.com/reuters/topNews?format=xml',
+    'http://feeds.bbci.co.uk/news/rss.xml'
+  ]
+  streamStepper(urls, 0)
 }
 
 collectData()
